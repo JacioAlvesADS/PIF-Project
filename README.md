@@ -5,7 +5,7 @@
 ## Equipe
 - Jácio Alves Neto Filho - [@JacioAlvesADS](https://github.com/JacioAlvesADS)
 - Mateus Felipe Cavalcanti e Silva - [@Mateus8708](https://github.com/Mateus8708/Mateus8708.github.io)
-- Pierre Costa Santiago de Oliveira Neto- [@sicrano](https://github.com/sicrano)
+- Pierre Costa Santiago de Oliveira Neto- [@PiierreC](https://github.com/PiierreC)
 
 ## Disciplina
 **Programação Imperativa e Funcional - 2024.2**
