@@ -10,13 +10,23 @@
 #include "screen.h"
 #include "keyboard.h"
 #include "timer.h"
+#include <time.h>
+#include <unistd.h>
+
 
 int x = 34, y = 5;
 int incX = 1, incY = 1;
 int incNave = 1;
-int x_nave = 32, y_nave = 12;
+int x_nave = 32, y_nave = 17;
+int x_pontuacao = 0, y_pontuacao = 0;
+int x_time = MAXX - 50, y_time = 32;
+time_t startTime;
+double velocidade = 50;
 
-void printHello(int nextX, int nextY)
+
+int time_decorrido = 0;
+
+/*void printHello(int nextX, int nextY)
 {
     screenSetColor(CYAN, DARKGRAY);
     screenGotoxy(x, y);
@@ -25,6 +35,33 @@ void printHello(int nextX, int nextY)
     y = nextY;
     screenGotoxy(x, y);
     printf("Hello World");
+}*/
+
+
+void displayTimer() {
+    screenSetColor(CYAN, DARKGRAY);
+
+    time_t currentTime = time(NULL);
+    int elapsedTime = (int)(currentTime - startTime);
+
+
+    int minutes = elapsedTime / 60;
+    int seconds = elapsedTime % 60;
+
+    screenGotoxy(x_time, y_time);
+    printf("Tempo decorrido: %02d:%02d", minutes, seconds);
+    fflush(stdout);
+    int time_decorrido = time_decorrido + 1;
+}
+
+void pontuacao_total(int vida){
+
+    screenSetColor(CYAN, DARKGRAY);
+    screenGotoxy(x_pontuacao, y_pontuacao);
+    int newVida = vida;
+    printf(" Sua vida é: %d ", newVida);
+
+
 }
 
 
@@ -41,14 +78,13 @@ void meteoros(int nextX, int nextY){
 void nave(int naveX){
     screenSetColor(WHITE, DARKGRAY);
     screenGotoxy(x_nave, y_nave);
-    printf("      ");
+    printf("       ");
     x_nave = naveX;
-    y_nave = 16;
+    y_nave = MAXY - 2;
     screenGotoxy(x_nave, y_nave);
     printf("=====");
 
 }
-
 void printKey(int ch)
 {
     screenSetColor(YELLOW, DARKGRAY);
@@ -70,6 +106,7 @@ void printKey(int ch)
 
 int main() 
 {
+    startTime = time(NULL);
     static int ch = 0;
 
     screenInit(1);
@@ -78,8 +115,10 @@ int main()
 
     meteoros(x, y);
     screenUpdate();
+    int pontuacao = 100;
 
-    while (ch != 10) //enter
+
+    while (pontuacao != 0) //enter
     {
         // Handle user input
         if (keyhit()) 
@@ -98,7 +137,7 @@ int main()
 
             
 
-            if (newY >= MAXY - 6){
+            if (newY >= MAXY){
                 newX = (rand() % (MAXX - 4)) + 3;
                 newY = MINY + 3;
             }
@@ -111,15 +150,39 @@ int main()
             }
 
             if (y == y_nave && x >= x_nave && x <= x_nave + 4){
-                break;
+                newX = (rand() % (MAXX - 4)) + 3;
+                newY = MINY + 3;
+                pontuacao = pontuacao - 10;
+            }
+                 
+            switch (time_decorrido) {
+                case 300:  // Após 5 minutos
+                    velocidade = 40;
+                    timerInit(velocidade);
+                    break;
+                case 600:  
+                    velocidade = 35;
+                    timerInit(velocidade);
+                    break;
+                case 1200:  
+                    velocidade = 25;
+                    timerInit(velocidade);
+                    break;
+                default:
+                    break;
             }
 
+            time_decorrido++;
+            //printf("%d", time_decorrido);
             //x_nave = naveEixo;
 
-            //printf("%d",x_nave);
+            //printf("%d", elapsedTime);
             //printKey(ch);
+            time_decorrido = time_decorrido + 1;
+            displayTimer();
             meteoros(newX, newY);
             nave(naveEixo);
+            pontuacao_total(pontuacao);
             //printHello(newX, newY);
 
             screenUpdate();
