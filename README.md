@@ -7,6 +7,7 @@
 - Mateus Felipe Cavalcanti e Silva - [@Mateus8708](https://github.com/Mateus8708/Mateus8708.github.io)
 - Pierre Costa Santiago de Oliveira Neto- [@PiierreC](https://github.com/PiierreC)
 - João Miguel Freitas De C. Ferrão - [@Joao-Miguel-F](https://github.com/Joao-Miguel-F)
+- Thaylane Paula Silva de Sousa - [@thaylanepaula](https://github.com/Thaylanepaula)
 
 ## Disciplina
 **Programação Imperativa e Funcional - 2024.2**
