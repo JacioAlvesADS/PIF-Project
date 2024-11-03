@@ -32,6 +32,11 @@ O executável será gerado na pasta `build/`.
 
 ### Execução
 Após a compilação, para jogar, utilize o comando:
+`gcc ./src/*.c -I./include -o cli-lib-example`
+
+E logo após
+`./cli-lib-example`                       
+
 
 ### Limpeza
 Para remover os arquivos gerados durante a compilação, execute:
@@ -41,14 +46,14 @@ Para remover os arquivos gerados durante a compilação, execute:
 **Hush Run** é um jogo de corrida no terminal, onde o jogador controla um personagem que deve desviar de obstáculos enquanto corre por uma pista infinita. O objetivo é sobreviver o maior tempo possível, acumulando pontos a cada obstáculo evitado. A velocidade aumenta gradualmente, tornando o desafio ainda mais intenso.
 
 ### Regras do Jogo
-1. O jogador controla o personagem usando as teclas de direção.
-2. O objetivo é evitar colidir com os obstáculos que aparecem na pista.
-3. A pontuação aumenta a cada obstáculo desviado com sucesso.
-4. O jogo termina quando o personagem colide com um obstáculo.
+1.	O jogador controla a nave espacial usando as teclas de direção.
+2.	O objetivo é evitar colidir com os meteoros que aparecem no espaço.
+3.	A pontuação aumenta a cada round desviado com sucesso.
+4.	O jogo termina quando a nave colide com um meteoro.
 
 ### Como Jogar
-- Use as **teclas de direção** para mover o personagem para a esquerda e direita.
-- Mantenha-se atento aos obstáculos que aparecem no caminho.
+- Use as **teclas de direção** para mover a nave para a esquerda e direita.
+- Mantenha-se atento aos meteoros que aparecem no caminho.
 - Aumente sua pontuação evitando colisões e sobreviva o maior tempo possível!
 
 Boa sorte e divirta-se jogando **Hush Run**!
