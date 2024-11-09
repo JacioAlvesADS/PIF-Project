@@ -82,7 +82,7 @@ void nave(int naveX){
     x_nave = naveX;
     y_nave = MAXY - 2;
     screenGotoxy(x_nave, y_nave);
-    printf("=====");
+    printf("8___8");
 
 }
 void printKey(int ch)
@@ -138,25 +138,25 @@ int main()
             
 
             if (newY >= MAXY){
-                newX = (rand() % (MAXX - 4)) + 3;
+                newX = (rand() % (MAXX - 4)) + 3; //Movimentação do Meteoro
                 newY = MINY + 3;
             }
 
 
             if (ch == 'd' && x_nave < MAXX - 7){
-                naveEixo = x_nave + incNave;
+                naveEixo = x_nave + incNave;//Movimentação da Nave
             }else if (ch == 'a' && x_nave > MINX + 2){
                 naveEixo = x_nave - incNave;
             }
 
             if (y == y_nave && x >= x_nave && x <= x_nave + 4){
                 newX = (rand() % (MAXX - 4)) + 3;
-                newY = MINY + 3;
+                newY = MINY + 3;//Colidir o Meteoro com a nave.
                 pontuacao = pontuacao - 10;
             }
                  
             switch (time_decorrido) {
-                case 300:  // Após 5 minutos
+                case 300:  // Variando a velocidade ao longo do tempo
                     velocidade = 40;
                     timerInit(velocidade);
                     break;
@@ -178,7 +178,7 @@ int main()
 
             //printf("%d", elapsedTime);
             //printKey(ch);
-            time_decorrido = time_decorrido + 1;
+            //time_decorrido = time_decorrido + 1;
             displayTimer();
             meteoros(newX, newY);
             nave(naveEixo);
