@@ -4,7 +4,7 @@
  * Author: Tiago Barros
  * Based on "From C to C++ course - 2002"
 */
-
+#include <sqlite3.h>
 #include <string.h>
 #include <stdlib.h>
 #include "screen.h"
@@ -12,7 +12,7 @@
 #include "timer.h"
 #include <time.h>
 #include <unistd.h>
-
+#define MAX_NOME 100
 
 int x = 34, y = 5;
 int x_dificil = 34, y_dificil = 5;
@@ -40,6 +40,36 @@ int long long time_decorrido = 0;
     printf("Hello World");
 }*/
 
+struct Jogador {
+    char nome[50];      
+    long long pontuacao; 
+};
+
+void inserirDados(struct Jogador jogador) {
+    sqlite3 *db;
+    char *erroMsg = 0;
+    int rc;
+    char sql[256];
+
+    rc = sqlite3_open("players.db", &db);
+    if (rc) {
+        fprintf(stderr, "Erro ao abrir o banco de dados: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    snprintf(sql, sizeof(sql), "INSERT INTO players (nome, pontuacao) VALUES ('%s', %lld);", 
+             jogador.nome, jogador.pontuacao);
+
+    rc = sqlite3_exec(db, sql, 0, 0, &erroMsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Erro ao inserir os dados: %s\n", erroMsg);
+        sqlite3_free(erroMsg);
+    } else {
+        printf("Dados inseridos com sucesso.\n");
+    }
+
+    sqlite3_close(db);
+}
 
 void displayTimer() {
     screenSetColor(CYAN, DARKGRAY);
@@ -74,14 +104,30 @@ void meteoros(int nextX, int nextY){
     printf("0");
 }
 
-void meteoros_dificil(int meteoroX, int meteoroY){
+void meteoros_dificil(int meteoroX, int meteoroY) {
+    int* coords = (int*)malloc(2 * sizeof(int));
+    if (coords == NULL) {
+        fprintf(stderr, "Erro ao alocar memória para as coordenadas do meteoro.\n");
+        return;
+    }
+
+    coords[0] = x_dificil;
+    coords[1] = y_dificil;
+
+   
     screenSetColor(BLUE, DARKGRAY);
-    screenGotoxy(x_dificil, y_dificil);
+    screenGotoxy(coords[0], coords[1]);
     printf(" ");
-    x_dificil = meteoroX;
-    y_dificil = meteoroY;
+
+    
+    coords[0] = meteoroX;
+    coords[1] = meteoroY;
+    x_dificil = coords[0];
+    y_dificil = coords[1];
+
     screenGotoxy(x_dificil, y_dificil);
-    printf("0");
+    printf("0"); 
+    free(coords);
 }
 void comecar(int x_comecar, int y_comecar){
     screenSetColor(RED, DARKGRAY);
@@ -102,6 +148,16 @@ void nave(int naveX){
     printf("8___8");
 
 }
+
+
+void reiniciarJogo() {
+    x = 34, y = 5;
+    x_dificil = 34, y_dificil = 5;
+    x_nave = 32, y_nave = 17;
+    time_decorrido = 0;
+    startTime = time(NULL);
+}
+
 void printKey(int ch)
 {
     screenSetColor(YELLOW, DARKGRAY);
@@ -125,14 +181,16 @@ int main()
 {
     startTime = time(NULL);
     static int ch = 0;
+    char jogarNovamente;
 
     screenInit(1);
     keyboardInit();
     timerInit(50);
+    struct Jogador jogador1;
 
     meteoros(x, y);
     screenUpdate();
-    int pontuacao = 100;
+    int pontuacao = 20;
     //char continuar;
     //comecar(32, 15);
 
@@ -235,7 +293,46 @@ int main()
             screenUpdate();
         }
     }
-    
+    while (pontuacao == 0)
+    {
+        printf("\nDigite seu nome: ");
+        int i = 0;
+        char ch;
+
+        while (1) {
+            ch = getchar(); 
+            if (ch == '\n' || i >= MAX_NOME - 1) { 
+                break;
+            }
+            jogador1.nome[i] = ch; 
+            i++;
+            putchar(ch);
+        }
+
+        jogador1.nome[i] = '\0';
+        jogador1.pontuacao = time_decorrido;
+
+        // Exibe os dados do jogador
+        printf("\n--- Fim do Jogo ---\n");
+        printf("Nome: %s\n", jogador1.nome);
+        printf("Pontuação: %lld\n", jogador1.pontuacao);
+
+        printf("Deseja jogar novamente?(s/n)");
+        scanf("%c", &jogarNovamente);
+
+        if( jogarNovamente == 's' ){
+            time_decorrido = 0;
+            main();
+            pontuacao = 100;
+
+        }else if(jogarNovamente == 'n'){
+            inserirDados(jogador1);
+            break;
+        }
+
+
+        }
+        
 
     keyboardDestroy();
     screenDestroy();
