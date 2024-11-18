@@ -190,7 +190,7 @@ int main()
 
     meteoros(x, y);
     screenUpdate();
-    int pontuacao = 20;
+    int pontuacao = 100;
     //char continuar;
     //comecar(32, 15);
 
